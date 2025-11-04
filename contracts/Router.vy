@@ -83,8 +83,8 @@ def _route_params() -> (address[11], uint256[5][5], address[5]):
     sp[0][0] = i
     sp[0][1] = j
     sp[0][2] = 1
-    sp[0][3] = 2
-    sp[0][4] = 2
+    sp[0][3] = 3
+    sp[0][4] = 3
 
     return route, sp, pools
 
