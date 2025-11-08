@@ -1,11 +1,10 @@
-import os
 import boa
+from boa_setup import setup_boa_environment
 
-# Setup Boa
-infura_key = os.environ.get("INFURA_API_KEY")
-etherscan_api_key = os.environ.get("ETHERSCAN_API_KEY")
-rpc_url = f"https://mainnet.infura.io/v3/{infura_key}"
-boa.fork(rpc_url)
+# Setup Boa environment (handles RPC patching, rate limiting, etc.)
+setup_boa_environment()
+
+# Set the EOA (Externally Owned Account) to use for transactions
 boa.env.eoa = "0x57757E3D981446D585Af0D9Ae4d7DF6D64647806"  # WETH Whale
 
 # Setup contracts

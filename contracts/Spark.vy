@@ -4,7 +4,7 @@
 
 # Constants
 pool: constant(address) = 0x00836Fe54625BE242BcFA286207795405ca4fD10
-USDT: constant(address) = 0xdAC17F958D2ee523a2206206994597C13D831ec7 
+USDT: constant(address) = 0xdAC17F958D2ee523a2206206994597C13D831ec7
 SUSDS: constant(address) = 0xa3931d71877C0E7a3148CB7Eb4463524FEc27fbD
 
 # Interfaces
@@ -45,6 +45,31 @@ def swap_usdt_susds(dx: uint256, min_dy: uint256) -> uint256:
 
     # Return Token
     extcall Token(SUSDS).transfer(msg.sender, retval)
+    return retval
+
+
+@external
+@view
+def quote_susds_usdt(dx: uint256) -> uint256:
+    i: int128 = self._get_index(SUSDS)
+    j: int128 = self._get_index(USDT)
+    return staticcall Pool(pool).get_dy(i, j, dx)
+
+
+@external
+def swap_susds_usdt(dx: uint256, min_dy: uint256) -> uint256:
+    i: int128 = self._get_index(SUSDS)
+    j: int128 = self._get_index(USDT)
+
+    # Intake Token
+    extcall Token(SUSDS).approve(pool, dx)
+    extcall Token(SUSDS).transferFrom(msg.sender, self, dx)
+
+    # Exchange
+    retval: uint256 = extcall Pool(pool).exchange(i, j, dx, min_dy)
+
+    # Return Token
+    extcall Token(USDT).transfer(msg.sender, retval)
     return retval
 
 
